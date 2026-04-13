@@ -95,179 +95,393 @@ type ThemeStyles = {
   shadow: string;
 };
 
-const CONTINENTS = [
-  "Africa",
-  "Asia",
-  "Europe",
-  "North America",
-  "Oceania",
-  "South America",
-];
+type RegionData = {
+  name: string;
+  cities: string[];
+};
 
-const COUNTRIES = [
-  "Argentina",
-  "Australia",
-  "Austria",
-  "Belgium",
-  "Brazil",
-  "Canada",
-  "Chile",
-  "China",
-  "Colombia",
-  "Costa Rica",
-  "Czech Republic",
-  "Denmark",
-  "Egypt",
-  "Finland",
-  "France",
-  "Germany",
-  "Greece",
-  "India",
-  "Indonesia",
-  "Ireland",
-  "Israel",
-  "Italy",
-  "Japan",
-  "Kenya",
-  "Malaysia",
-  "Mexico",
-  "Morocco",
-  "Netherlands",
-  "New Zealand",
-  "Nigeria",
-  "Norway",
-  "Peru",
-  "Philippines",
-  "Poland",
-  "Portugal",
-  "Singapore",
-  "South Africa",
-  "South Korea",
-  "Spain",
-  "Sweden",
-  "Switzerland",
-  "Thailand",
-  "Turkey",
-  "United Arab Emirates",
-  "United Kingdom",
-  "United States",
-  "Uruguay",
-  "Vietnam",
-];
+type CountryData = {
+  regionLabel: string;
+  cityLabel?: string;
+  regions: RegionData[];
+};
 
-const REGIONS = [
-  "Auckland",
-  "Bavaria",
-  "British Columbia",
-  "California",
-  "Catalonia",
-  "Colorado",
-  "Dubai",
-  "England",
-  "Florida",
-  "Gauteng",
-  "Hokkaido",
-  "Illinois",
-  "Île-de-France",
-  "Jalisco",
-  "Karnataka",
-  "Lagos",
-  "Lisbon District",
-  "Maharashtra",
-  "Metro Manila",
-  "Mexico City",
-  "New South Wales",
-  "New York",
-  "North Holland",
-  "Northern District",
-  "Ontario",
-  "Oregon",
-  "Queensland",
-  "Quebec",
-  "Rio de Janeiro",
-  "Santiago Metropolitan",
-  "Scotland",
-  "São Paulo",
-  "Texas",
-  "Tokyo",
-  "Victoria",
-  "Washington",
-  "Western Cape",
-  "Zurich",
-];
+type LocationData = Record<string, Record<string, CountryData>>;
 
-const CITIES = [
-  "Amsterdam",
-  "Athens",
-  "Auckland",
-  "Austin",
-  "Bangkok",
-  "Barcelona",
-  "Beijing",
-  "Berlin",
-  "Bogotá",
-  "Boston",
-  "Brussels",
-  "Buenos Aires",
-  "Cape Town",
-  "Chicago",
-  "Copenhagen",
-  "Dallas",
-  "Denver",
-  "Dubai",
-  "Dublin",
-  "Edinburgh",
-  "Florence",
-  "Frankfurt",
-  "Hanoi",
-  "Ho Chi Minh City",
-  "Hong Kong",
-  "Houston",
-  "Istanbul",
-  "Jakarta",
-  "Jerusalem",
-  "Johannesburg",
-  "Joshua Tree",
-  "Kyoto",
-  "Lagos",
-  "Lisbon",
-  "London",
-  "Los Angeles",
-  "Madrid",
-  "Melbourne",
-  "Mexico City",
-  "Miami",
-  "Milan",
-  "Montreal",
-  "Mumbai",
-  "Munich",
-  "Nairobi",
-  "New York City",
-  "Osaka",
-  "Paris",
-  "Perth",
-  "Portland",
-  "Prague",
-  "Rio de Janeiro",
-  "Rome",
-  "San Diego",
-  "San Francisco",
-  "Santiago",
-  "São Paulo",
-  "Seattle",
-  "Seoul",
-  "Singapore",
-  "Stockholm",
-  "Sydney",
-  "Tel Aviv",
-  "Tokyo",
-  "Toronto",
-  "Vancouver",
-  "Vienna",
-  "Warsaw",
-  "Washington, D.C.",
-  "Zurich",
-];
+const LOCATION_DATA: LocationData = {
+  Africa: {
+    Egypt: {
+      regionLabel: "Governorate",
+      cityLabel: "City",
+      regions: [
+        { name: "Cairo Governorate", cities: ["Cairo", "Heliopolis", "Nasr City"] },
+        { name: "Alexandria Governorate", cities: ["Alexandria", "Borg El Arab"] },
+        { name: "Giza Governorate", cities: ["Giza", "6th of October City", "Sheikh Zayed City"] },
+      ],
+    },
+    Kenya: {
+      regionLabel: "County",
+      cityLabel: "City / Town",
+      regions: [
+        { name: "Nairobi County", cities: ["Nairobi", "Karen", "Westlands"] },
+        { name: "Mombasa County", cities: ["Mombasa", "Likoni"] },
+        { name: "Kiambu County", cities: ["Kiambu", "Thika", "Ruiru"] },
+      ],
+    },
+    Morocco: {
+      regionLabel: "Region",
+      cityLabel: "City",
+      regions: [
+        { name: "Casablanca-Settat", cities: ["Casablanca", "Mohammedia", "Settat"] },
+        { name: "Rabat-Salé-Kénitra", cities: ["Rabat", "Salé", "Kénitra"] },
+        { name: "Marrakesh-Safi", cities: ["Marrakesh", "Essaouira"] },
+      ],
+    },
+    Nigeria: {
+      regionLabel: "State",
+      cityLabel: "City",
+      regions: [
+        { name: "Lagos", cities: ["Lagos", "Ikeja", "Lekki"] },
+        { name: "Abuja FCT", cities: ["Abuja", "Gwagwalada"] },
+        { name: "Rivers", cities: ["Port Harcourt"] },
+      ],
+    },
+    South Africa: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Gauteng", cities: ["Johannesburg", "Pretoria", "Sandton"] },
+        { name: "Western Cape", cities: ["Cape Town", "Stellenbosch"] },
+        { name: "KwaZulu-Natal", cities: ["Durban", "Pietermaritzburg"] },
+      ],
+    },
+  },
+
+  Asia: {
+    India: {
+      regionLabel: "State",
+      cityLabel: "City",
+      regions: [
+        { name: "Maharashtra", cities: ["Mumbai", "Pune", "Nashik"] },
+        { name: "Karnataka", cities: ["Bengaluru", "Mysuru"] },
+        { name: "Delhi", cities: ["New Delhi", "Delhi"] },
+      ],
+    },
+    Indonesia: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Jakarta", cities: ["Jakarta", "Central Jakarta"] },
+        { name: "Bali", cities: ["Denpasar", "Ubud"] },
+        { name: "West Java", cities: ["Bandung", "Bekasi"] },
+      ],
+    },
+    Israel: {
+      regionLabel: "District",
+      cityLabel: "City",
+      regions: [
+        { name: "Tel Aviv District", cities: ["Tel Aviv", "Ramat Gan", "Herzliya"] },
+        { name: "Jerusalem District", cities: ["Jerusalem", "Beit Shemesh"] },
+        { name: "Northern District", cities: ["Haifa", "Nazareth", "Tiberias"] },
+      ],
+    },
+    Japan: {
+      regionLabel: "Prefecture",
+      cityLabel: "City",
+      regions: [
+        { name: "Tokyo", cities: ["Tokyo", "Shibuya", "Shinjuku"] },
+        { name: "Osaka", cities: ["Osaka", "Sakai"] },
+        { name: "Kyoto", cities: ["Kyoto", "Uji"] },
+      ],
+    },
+    Singapore: {
+      regionLabel: "Region",
+      cityLabel: "Area / City",
+      regions: [
+        { name: "Central Region", cities: ["Singapore", "Orchard", "Marina Bay"] },
+        { name: "East Region", cities: ["Tampines", "Pasir Ris"] },
+        { name: "North Region", cities: ["Woodlands", "Yishun"] },
+      ],
+    },
+    South Korea: {
+      regionLabel: "Province / Metro",
+      cityLabel: "City",
+      regions: [
+        { name: "Seoul", cities: ["Seoul", "Gangnam", "Mapo"] },
+        { name: "Busan", cities: ["Busan", "Haeundae"] },
+        { name: "Gyeonggi", cities: ["Suwon", "Seongnam", "Goyang"] },
+      ],
+    },
+    Thailand: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Bangkok", cities: ["Bangkok"] },
+        { name: "Chiang Mai", cities: ["Chiang Mai"] },
+        { name: "Phuket", cities: ["Phuket", "Patong"] },
+      ],
+    },
+    "United Arab Emirates": {
+      regionLabel: "Emirate",
+      cityLabel: "City",
+      regions: [
+        { name: "Dubai", cities: ["Dubai"] },
+        { name: "Abu Dhabi", cities: ["Abu Dhabi", "Al Ain"] },
+        { name: "Sharjah", cities: ["Sharjah"] },
+      ],
+    },
+  },
+
+  Europe: {
+    France: {
+      regionLabel: "Region",
+      cityLabel: "City",
+      regions: [
+        { name: "Île-de-France", cities: ["Paris", "Versailles", "Boulogne-Billancourt"] },
+        { name: "Provence-Alpes-Côte d'Azur", cities: ["Marseille", "Nice", "Cannes"] },
+        { name: "Auvergne-Rhône-Alpes", cities: ["Lyon", "Grenoble"] },
+      ],
+    },
+    Germany: {
+      regionLabel: "State",
+      cityLabel: "City",
+      regions: [
+        { name: "Bavaria", cities: ["Munich", "Nuremberg"] },
+        { name: "Berlin", cities: ["Berlin"] },
+        { name: "Hesse", cities: ["Frankfurt", "Wiesbaden"] },
+      ],
+    },
+    Italy: {
+      regionLabel: "Region",
+      cityLabel: "City",
+      regions: [
+        { name: "Lazio", cities: ["Rome"] },
+        { name: "Lombardy", cities: ["Milan", "Bergamo"] },
+        { name: "Tuscany", cities: ["Florence", "Siena"] },
+      ],
+    },
+    Netherlands: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "North Holland", cities: ["Amsterdam", "Haarlem"] },
+        { name: "South Holland", cities: ["Rotterdam", "The Hague"] },
+        { name: "Utrecht", cities: ["Utrecht"] },
+      ],
+    },
+    Portugal: {
+      regionLabel: "District",
+      cityLabel: "City",
+      regions: [
+        { name: "Lisbon District", cities: ["Lisbon", "Cascais"] },
+        { name: "Porto District", cities: ["Porto", "Matosinhos"] },
+        { name: "Faro District", cities: ["Faro", "Lagos"] },
+      ],
+    },
+    Spain: {
+      regionLabel: "Autonomous Community",
+      cityLabel: "City",
+      regions: [
+        { name: "Catalonia", cities: ["Barcelona", "Girona"] },
+        { name: "Community of Madrid", cities: ["Madrid"] },
+        { name: "Andalusia", cities: ["Seville", "Málaga", "Granada"] },
+      ],
+    },
+    Sweden: {
+      regionLabel: "County",
+      cityLabel: "City",
+      regions: [
+        { name: "Stockholm County", cities: ["Stockholm", "Solna"] },
+        { name: "Västra Götaland", cities: ["Gothenburg"] },
+        { name: "Skåne County", cities: ["Malmö", "Lund"] },
+      ],
+    },
+    "United Kingdom": {
+      regionLabel: "Nation / Region",
+      cityLabel: "City",
+      regions: [
+        { name: "England", cities: ["London", "Manchester", "Bristol"] },
+        { name: "Scotland", cities: ["Edinburgh", "Glasgow"] },
+        { name: "Wales", cities: ["Cardiff"] },
+      ],
+    },
+  },
+
+  "North America": {
+    Bahamas: {
+      regionLabel: "Island / District",
+      cityLabel: "City / Town",
+      regions: [
+        { name: "New Providence", cities: ["Nassau"] },
+        { name: "Grand Bahama", cities: ["Freeport"] },
+      ],
+    },
+    Canada: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Ontario", cities: ["Toronto", "Ottawa", "Mississauga"] },
+        { name: "British Columbia", cities: ["Vancouver", "Victoria"] },
+        { name: "Quebec", cities: ["Montreal", "Quebec City"] },
+        { name: "Alberta", cities: ["Calgary", "Edmonton"] },
+      ],
+    },
+    "Costa Rica": {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "San José", cities: ["San José", "Escazú"] },
+        { name: "Guanacaste", cities: ["Liberia", "Tamarindo"] },
+        { name: "Puntarenas", cities: ["Puntarenas", "Jacó"] },
+      ],
+    },
+    "Dominican Republic": {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Distrito Nacional", cities: ["Santo Domingo"] },
+        { name: "Santiago", cities: ["Santiago de los Caballeros"] },
+        { name: "La Altagracia", cities: ["Punta Cana", "Higüey"] },
+      ],
+    },
+    Guatemala: {
+      regionLabel: "Department",
+      cityLabel: "City",
+      regions: [
+        { name: "Guatemala", cities: ["Guatemala City"] },
+        { name: "Sacatepéquez", cities: ["Antigua Guatemala"] },
+        { name: "Quetzaltenango", cities: ["Quetzaltenango"] },
+      ],
+    },
+    Jamaica: {
+      regionLabel: "Parish",
+      cityLabel: "City / Town",
+      regions: [
+        { name: "Kingston", cities: ["Kingston"] },
+        { name: "Saint James", cities: ["Montego Bay"] },
+        { name: "Saint Ann", cities: ["Ocho Rios"] },
+      ],
+    },
+    Mexico: {
+      regionLabel: "State",
+      cityLabel: "City",
+      regions: [
+        { name: "Mexico City", cities: ["Mexico City"] },
+        { name: "Jalisco", cities: ["Guadalajara", "Puerto Vallarta"] },
+        { name: "Nuevo León", cities: ["Monterrey"] },
+        { name: "Quintana Roo", cities: ["Cancún", "Tulum"] },
+      ],
+    },
+    Panama: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Panamá", cities: ["Panama City"] },
+        { name: "Chiriquí", cities: ["David", "Boquete"] },
+        { name: "Colón", cities: ["Colón"] },
+      ],
+    },
+    "United States": {
+      regionLabel: "State",
+      cityLabel: "City",
+      regions: [
+        { name: "California", cities: ["San Diego", "Los Angeles", "San Francisco", "Joshua Tree"] },
+        { name: "Texas", cities: ["Austin", "Dallas", "Houston"] },
+        { name: "New York", cities: ["New York City", "Buffalo"] },
+        { name: "Florida", cities: ["Miami", "Orlando"] },
+        { name: "Washington", cities: ["Seattle"] },
+        { name: "Oregon", cities: ["Portland"] },
+        { name: "Colorado", cities: ["Denver", "Boulder"] },
+      ],
+    },
+  },
+
+  Oceania: {
+    Australia: {
+      regionLabel: "State / Territory",
+      cityLabel: "City",
+      regions: [
+        { name: "New South Wales", cities: ["Sydney", "Newcastle"] },
+        { name: "Victoria", cities: ["Melbourne", "Geelong"] },
+        { name: "Queensland", cities: ["Brisbane", "Gold Coast"] },
+        { name: "Western Australia", cities: ["Perth"] },
+      ],
+    },
+    Fiji: {
+      regionLabel: "Division",
+      cityLabel: "City / Town",
+      regions: [
+        { name: "Central Division", cities: ["Suva", "Nausori"] },
+        { name: "Western Division", cities: ["Nadi", "Lautoka"] },
+      ],
+    },
+    "New Zealand": {
+      regionLabel: "Region",
+      cityLabel: "City",
+      regions: [
+        { name: "Auckland", cities: ["Auckland"] },
+        { name: "Wellington", cities: ["Wellington"] },
+        { name: "Canterbury", cities: ["Christchurch"] },
+      ],
+    },
+  },
+
+  "South America": {
+    Argentina: {
+      regionLabel: "Province",
+      cityLabel: "City",
+      regions: [
+        { name: "Buenos Aires", cities: ["Buenos Aires", "La Plata"] },
+        { name: "Córdoba", cities: ["Córdoba"] },
+        { name: "Mendoza", cities: ["Mendoza"] },
+      ],
+    },
+    Brazil: {
+      regionLabel: "State",
+      cityLabel: "City",
+      regions: [
+        { name: "São Paulo", cities: ["São Paulo", "Campinas"] },
+        { name: "Rio de Janeiro", cities: ["Rio de Janeiro", "Niterói"] },
+        { name: "Bahia", cities: ["Salvador"] },
+      ],
+    },
+    Chile: {
+      regionLabel: "Region",
+      cityLabel: "City",
+      regions: [
+        { name: "Santiago Metropolitan", cities: ["Santiago"] },
+        { name: "Valparaíso", cities: ["Valparaíso", "Viña del Mar"] },
+        { name: "Los Lagos", cities: ["Puerto Montt"] },
+      ],
+    },
+    Colombia: {
+      regionLabel: "Department",
+      cityLabel: "City",
+      regions: [
+        { name: "Bogotá D.C.", cities: ["Bogotá"] },
+        { name: "Antioquia", cities: ["Medellín"] },
+        { name: "Valle del Cauca", cities: ["Cali"] },
+      ],
+    },
+    Peru: {
+      regionLabel: "Region",
+      cityLabel: "City",
+      regions: [
+        { name: "Lima", cities: ["Lima"] },
+        { name: "Cusco", cities: ["Cusco"] },
+        { name: "Arequipa", cities: ["Arequipa"] },
+      ],
+    },
+    Uruguay: {
+      regionLabel: "Department",
+      cityLabel: "City",
+      regions: [
+        { name: "Montevideo", cities: ["Montevideo"] },
+        { name: "Maldonado", cities: ["Punta del Este"] },
+      ],
+    },
+  },
+};
 
 const PLAN_OPTIONS: {
   key: PlanKey;
@@ -764,6 +978,34 @@ export default function Prototype4() {
   const mutedTextClass = isDark ? "text-slate-300" : "text-slate-600";
   const placeholderClass = isDark ? "placeholder:text-slate-500" : "placeholder:text-slate-400";
 
+  const countriesForSelectedContinent = useMemo(() => {
+    if (!selectedContinent || !LOCATION_DATA[selectedContinent]) return [];
+    return Object.keys(LOCATION_DATA[selectedContinent]).sort();
+  }, [selectedContinent]);
+
+  const selectedCountryData = useMemo<CountryData | null>(() => {
+    if (!selectedContinent || !selectedCountry) return null;
+    return LOCATION_DATA[selectedContinent]?.[selectedCountry] ?? null;
+  }, [selectedContinent, selectedCountry]);
+
+  const regionsForSelectedCountry = useMemo(() => {
+    if (!selectedCountryData) return [];
+    return selectedCountryData.regions.map((region) => region.name);
+  }, [selectedCountryData]);
+
+  const selectedRegionData = useMemo<RegionData | null>(() => {
+    if (!selectedCountryData || !selectedRegion) return null;
+    return selectedCountryData.regions.find((region) => region.name === selectedRegion) ?? null;
+  }, [selectedCountryData, selectedRegion]);
+
+  const citiesForSelectedRegion = useMemo(() => {
+    if (!selectedRegionData) return [];
+    return selectedRegionData.cities;
+  }, [selectedRegionData]);
+
+  const regionLabel = selectedCountryData?.regionLabel || "State / Province / Region";
+  const cityLabel = selectedCountryData?.cityLabel || "City";
+
   const currentLocation = useMemo(() => {
     if (!selectedCity || !selectedRegion || !selectedCountry || !selectedContinent) return "";
     return `${selectedCity}, ${selectedRegion}, ${selectedCountry}, ${selectedContinent}`;
@@ -949,6 +1191,24 @@ export default function Prototype4() {
     setPage("projects");
   };
 
+  const handleContinentChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedContinent(e.target.value);
+    setSelectedCountry("");
+    setSelectedRegion("");
+    setSelectedCity("");
+  };
+
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountry(e.target.value);
+    setSelectedRegion("");
+    setSelectedCity("");
+  };
+
+  const handleRegionChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedRegion(e.target.value);
+    setSelectedCity("");
+  };
+
   const ProjectCard = ({
     project,
     compact = false,
@@ -1034,13 +1294,14 @@ export default function Prototype4() {
             <div className="space-y-4">
               <h1 className="text-5xl font-semibold tracking-tight">Step 1: account details.</h1>
               <p className={`max-w-xl text-lg leading-8 ${mutedTextClass}`}>
-                Enter your email, phone number, and location first. Payment and plan selection now happen in a separate step right after this.
+                Enter your email, phone number, and location first. The location dropdowns now filter properly by continent,
+                then country, then region, then city.
               </p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
               {[
-                { title: "Step 1", text: "Enter email, phone, and location.", icon: User },
+                { title: "Step 1", text: "Enter email, phone, and filtered location.", icon: User },
                 { title: "Step 2", text: "Choose a plan and optionally enter payment info.", icon: CreditCard },
                 { title: "Step 3", text: "See a short confirmation screen before Home.", icon: CheckCircle2 },
               ].map((item) => {
@@ -1061,7 +1322,7 @@ export default function Prototype4() {
               <div>
                 <h2 className="text-3xl font-semibold">Required account details</h2>
                 <p className={`mt-2 text-sm leading-6 ${mutedTextClass}`}>
-                  Payment is no longer here. This step only collects account basics and location.
+                  Choose your location in order: continent, country, {regionLabel.toLowerCase()}, then {cityLabel.toLowerCase()}.
                 </p>
               </div>
 
@@ -1098,8 +1359,8 @@ export default function Prototype4() {
                   <label className="mb-2 block text-sm font-medium">Continent</label>
                   <ThemeSelect
                     value={selectedContinent}
-                    onChange={(e) => setSelectedContinent(e.target.value)}
-                    options={CONTINENTS}
+                    onChange={handleContinentChange}
+                    options={Object.keys(LOCATION_DATA)}
                     placeholder="Select continent"
                     themeStyles={themeStyles}
                   />
@@ -1109,31 +1370,31 @@ export default function Prototype4() {
                   <label className="mb-2 block text-sm font-medium">Country</label>
                   <ThemeSelect
                     value={selectedCountry}
-                    onChange={(e) => setSelectedCountry(e.target.value)}
-                    options={COUNTRIES}
-                    placeholder="Select country"
+                    onChange={handleCountryChange}
+                    options={countriesForSelectedContinent}
+                    placeholder={selectedContinent ? "Select country" : "Select continent first"}
                     themeStyles={themeStyles}
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium">State / Province / Region</label>
+                  <label className="mb-2 block text-sm font-medium">{regionLabel}</label>
                   <ThemeSelect
                     value={selectedRegion}
-                    onChange={(e) => setSelectedRegion(e.target.value)}
-                    options={REGIONS}
-                    placeholder="Select state / region"
+                    onChange={handleRegionChange}
+                    options={regionsForSelectedCountry}
+                    placeholder={selectedCountry ? `Select ${regionLabel.toLowerCase()}` : "Select country first"}
                     themeStyles={themeStyles}
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium">City</label>
+                  <label className="mb-2 block text-sm font-medium">{cityLabel}</label>
                   <ThemeSelect
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    options={CITIES}
-                    placeholder="Select city"
+                    options={citiesForSelectedRegion}
+                    placeholder={selectedRegion ? `Select ${cityLabel.toLowerCase()}` : `Select ${regionLabel.toLowerCase()} first`}
                     themeStyles={themeStyles}
                   />
                 </div>
@@ -1253,10 +1514,7 @@ export default function Prototype4() {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <ThemeButton
-                  themeStyles={themeStyles}
-                  onClick={() => setAppStage("signin_details")}
-                >
+                <ThemeButton themeStyles={themeStyles} onClick={() => setAppStage("signin_details")}>
                   Back
                 </ThemeButton>
                 <ThemeButton
@@ -1299,24 +1557,34 @@ export default function Prototype4() {
             >
               <CheckCircle2 className="h-8 w-8" />
             </div>
+
             <h1 className="text-3xl font-semibold">You’re all set.</h1>
             <p className={`mx-auto mt-3 max-w-2xl text-sm leading-7 ${mutedTextClass}`}>
               Your account details were saved for the prototype. Selected plan: <strong>{planLabel}</strong>. No real payment is being processed yet.
             </p>
+
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border p-4 text-left" style={{ borderColor: themeStyles.border, backgroundColor: themeStyles.pill }}>
                 <p className="font-medium">Location</p>
                 <p className={`mt-2 text-sm ${mutedTextClass}`}>{currentLocation || "No location saved"}</p>
               </div>
+
               <div className="rounded-2xl border p-4 text-left" style={{ borderColor: themeStyles.border, backgroundColor: themeStyles.pill }}>
                 <p className="font-medium">Billing status</p>
                 <p className={`mt-2 text-sm ${mutedTextClass}`}>
-                  {selectedPlan === "skip" ? "Skipped for now" : billingAddress || cardNumber ? "Payment details entered" : "Plan selected without card details"}
+                  {selectedPlan === "skip"
+                    ? "Skipped for now"
+                    : billingAddress || cardNumber
+                    ? "Payment details entered"
+                    : "Plan selected without card details"}
                 </p>
               </div>
             </div>
+
             <div className="mt-8 flex justify-center gap-3">
-              <ThemeButton themeStyles={themeStyles} onClick={() => setAppStage("signin_payment")}>Back</ThemeButton>
+              <ThemeButton themeStyles={themeStyles} onClick={() => setAppStage("signin_payment")}>
+                Back
+              </ThemeButton>
               <ThemeButton
                 themeStyles={themeStyles}
                 active
@@ -1359,7 +1627,9 @@ export default function Prototype4() {
                 </p>
               </div>
 
-              <ThemeButton themeStyles={themeStyles} onClick={() => setPage("account_info")}>Save and exit</ThemeButton>
+              <ThemeButton themeStyles={themeStyles} onClick={() => setPage("account_info")}>
+                Save and exit
+              </ThemeButton>
             </div>
 
             <div className="mb-6 h-3 w-full overflow-hidden rounded-full" style={{ backgroundColor: themeStyles.pill }}>
@@ -1519,7 +1789,7 @@ export default function Prototype4() {
             >
               <Search className="h-4 w-4" style={{ color: themeStyles.muted }} />
               <input
-                className={`w-full bg-transparent text-sm outline-none placeholder:text-slate-400`}
+                className={`w-full bg-transparent text-sm outline-none ${placeholderClass}`}
                 placeholder="Search projects by title, location, category, or tags"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
