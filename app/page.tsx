@@ -146,7 +146,7 @@ const LOCATION_DATA: LocationData = {
         { name: "Rivers", cities: ["Port Harcourt"] },
       ],
     },
-    South Africa: {
+    "South Africa": {
       regionLabel: "Province",
       cityLabel: "City",
       regions: [
