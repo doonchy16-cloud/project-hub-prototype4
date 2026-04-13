@@ -203,7 +203,7 @@ const LOCATION_DATA: LocationData = {
         { name: "North Region", cities: ["Woodlands", "Yishun"] },
       ],
     },
-    South Korea: {
+    "South Korea": {
       regionLabel: "Province / Metro",
       cityLabel: "City",
       regions: [
