@@ -629,10 +629,18 @@ function getAdaptiveQuestions(currentLocation: string, answers: Record<string, s
     locationLower.includes("san diego") ||
     locationLower.includes("los angeles");
 
-  const householdType = answers.household_type || "household";
+  const householdType = answers.household_type || "";
   const projectType = answers.project_type || "community";
   const primaryStrength = answers.primary_strength || "your main strength";
   const timeline = answers.timeline || "sometime soon";
+
+  const shouldAskHouseholdSize =
+    householdType !== "Individual" && householdType !== "Couple";
+
+  const householdSizeLabel =
+    householdType === "Friends / group"
+      ? "How many people are in your group?"
+      : "How many people are in your household?";
 
   return [
     {
@@ -640,21 +648,39 @@ function getAdaptiveQuestions(currentLocation: string, answers: Record<string, s
       category: "Status",
       type: "select",
       label: "Which best describes your current household status?",
-      options: ["Individual", "Couple", "Family with kids", "Family without kids", "Friends / group"],
+      options: [
+        "Individual",
+        "Couple",
+        "Family with kids",
+        "Family without kids",
+        "Friends / group",
+      ],
     },
-    {
-      id: "household_size",
-      category: "Status",
-      type: "select",
-      label: `How many people are in ${householdType.toLowerCase()}?`,
-      options: ["1", "2", "3-4", "5-6", "7+"],
-    },
+
+    ...(shouldAskHouseholdSize
+      ? [
+          {
+            id: "household_size",
+            category: "Status",
+            type: "select",
+            label: householdSizeLabel,
+            options: ["1", "2", "3-4", "5-6", "7+"],
+          } as Question,
+        ]
+      : []),
+
     {
       id: "timeline",
       category: "Location + Timing",
       type: "select",
       label: "How soon are you realistically hoping to make a move or join a project?",
-      options: ["Just researching", "Within 6-12 months", "Within 3-6 months", "Within 1-3 months", "Ready now"],
+      options: [
+        "Just researching",
+        "Within 6-12 months",
+        "Within 3-6 months",
+        "Within 1-3 months",
+        "Ready now",
+      ],
     },
     {
       id: "distance_preference",
@@ -662,15 +688,34 @@ function getAdaptiveQuestions(currentLocation: string, answers: Record<string, s
       type: "select",
       label: `How far from ${currentLocation || "your current location"} would you consider going?`,
       options: inCalifornia
-        ? ["Stay very local", "Anywhere in California", "Western U.S.", "Anywhere in the U.S.", "Open internationally"]
-        : ["Stay very local", "Within my region", "Anywhere in my state", "Anywhere in the U.S.", "Open internationally"],
+        ? [
+            "Stay very local",
+            "Anywhere in California",
+            "Western U.S.",
+            "Anywhere in the U.S.",
+            "Open internationally",
+          ]
+        : [
+            "Stay very local",
+            "Within my region",
+            "Anywhere in my state",
+            "Anywhere in the U.S.",
+            "Open internationally",
+          ],
     },
     {
       id: "project_type",
       category: "Project Preferences",
       type: "select",
       label: "What kind of project are you most drawn to right now?",
-      options: ["Off-grid build", "Family community", "Creative homestead", "Regenerative farm", "Remote-work community", "Education village"],
+      options: [
+        "Off-grid build",
+        "Family community",
+        "Creative homestead",
+        "Regenerative farm",
+        "Remote-work community",
+        "Education village",
+      ],
     },
     {
       id: "climate_preference",
@@ -678,43 +723,85 @@ function getAdaptiveQuestions(currentLocation: string, answers: Record<string, s
       type: "select",
       label: `Based on being in ${currentLocation || "your location"}, what climate or environment feels best for you?`,
       options: inCalifornia
-        ? ["Coastal / mild", "Mountain / forest", "Desert / dry", "Rural farmland", "No strong preference"]
-        : ["Warm / sunny", "Cool / forested", "Dry / desert", "Rural farmland", "No strong preference"],
+        ? [
+            "Coastal / mild",
+            "Mountain / forest",
+            "Desert / dry",
+            "Rural farmland",
+            "No strong preference",
+          ]
+        : [
+            "Warm / sunny",
+            "Cool / forested",
+            "Dry / desert",
+            "Rural farmland",
+            "No strong preference",
+          ],
     },
     {
       id: "community_style",
       category: "Lifestyle",
       type: "select",
       label: "How much community interaction do you want in daily life?",
-      options: ["Mostly private", "Small circle", "Balanced mix", "Highly communal", "Flexible / depends on project"],
+      options: [
+        "Mostly private",
+        "Small circle",
+        "Balanced mix",
+        "Highly communal",
+        "Flexible / depends on project",
+      ],
     },
     {
       id: "housing_style",
       category: "Lifestyle",
       type: "select",
       label: `For a ${projectType.toLowerCase()} setup, what housing style feels like the best fit?`,
-      options: ["Private house", "Cabin / tiny home", "Shared land with separate homes", "Intentional shared housing", "Still exploring"],
+      options: [
+        "Private house",
+        "Cabin / tiny home",
+        "Shared land with separate homes",
+        "Intentional shared housing",
+        "Still exploring",
+      ],
     },
     {
       id: "work_style",
       category: "Work + Finances",
       type: "select",
       label: "What best describes your current work or income style?",
-      options: ["Remote work", "Local job / business", "Self-employed", "Homemaker / caretaker", "Mixed / transitioning"],
+      options: [
+        "Remote work",
+        "Local job / business",
+        "Self-employed",
+        "Homemaker / caretaker",
+        "Mixed / transitioning",
+      ],
     },
     {
       id: "budget_status",
       category: "Work + Finances",
       type: "select",
       label: "What is your current financial readiness for joining or building something?",
-      options: ["Very limited right now", "Modest budget", "Can contribute steadily", "Can invest meaningfully", "Need flexible arrangements"],
+      options: [
+        "Very limited right now",
+        "Modest budget",
+        "Can contribute steadily",
+        "Can invest meaningfully",
+        "Need flexible arrangements",
+      ],
     },
     {
       id: "build_readiness",
       category: "Skills + Abilities",
       type: "select",
       label: "How ready are you for physical building, setup, or hands-on project work?",
-      options: ["Prefer non-physical roles", "Can help lightly", "Can help regularly", "Strong hands-on contributor", "Depends on the project"],
+      options: [
+        "Prefer non-physical roles",
+        "Can help lightly",
+        "Can help regularly",
+        "Strong hands-on contributor",
+        "Depends on the project",
+      ],
     },
     {
       id: "family_fit",
@@ -723,63 +810,109 @@ function getAdaptiveQuestions(currentLocation: string, answers: Record<string, s
       label: householdType.toLowerCase().includes("family")
         ? "What kind of child and family support matters most to you?"
         : "How important is it that the project be family-friendly or child-compatible?",
-      options: ["Very important", "Helpful but not essential", "Neutral", "Only if the fit is right", "Not important"],
+      options: [
+        "Very important",
+        "Helpful but not essential",
+        "Neutral",
+        "Only if the fit is right",
+        "Not important",
+      ],
     },
     {
       id: "food_lifestyle",
       category: "Project Preferences",
       type: "select",
       label: "Which lifestyle element matters most in the project’s daily culture?",
-      options: ["Gardening / food growing", "Health / wellness", "Learning / education", "Creativity / arts", "Building / making"],
+      options: [
+        "Gardening / food growing",
+        "Health / wellness",
+        "Learning / education",
+        "Creativity / arts",
+        "Building / making",
+      ],
     },
     {
       id: "accessibility_needs",
       category: "Status",
       type: "select",
       label: "What best describes your accessibility, health, or energy considerations right now?",
-      options: ["No major constraints", "Need moderate flexibility", "Need strong accessibility support", "Need lower-physical-intensity roles", "Prefer not to say"],
+      options: [
+        "No major constraints",
+        "Need moderate flexibility",
+        "Need strong accessibility support",
+        "Need lower-physical-intensity roles",
+        "Prefer not to say",
+      ],
     },
     {
       id: "primary_strength",
       category: "Skills + Abilities",
       type: "select",
       label: "What is your strongest contribution to a community or project?",
-      options: ["Teaching / mentoring", "Building / construction", "Gardening / farming", "Operations / organizing", "Creative / arts", "Wellness / care"],
+      options: [
+        "Teaching / mentoring",
+        "Building / construction",
+        "Gardening / farming",
+        "Operations / organizing",
+        "Creative / arts",
+        "Wellness / care",
+      ],
     },
     {
       id: "secondary_strength",
       category: "Skills + Abilities",
       type: "select",
       label: `What is your second-strongest contribution alongside ${primaryStrength.toLowerCase()}?`,
-      options: ["Teaching / mentoring", "Building / construction", "Gardening / farming", "Operations / organizing", "Creative / arts", "Wellness / care"],
+      options: [
+        "Teaching / mentoring",
+        "Building / construction",
+        "Gardening / farming",
+        "Operations / organizing",
+        "Creative / arts",
+        "Wellness / care",
+      ],
     },
     {
       id: "role_preference",
       category: "Commitment + Fit",
       type: "select",
       label: "What role do you naturally want in a community?",
-      options: ["Leader / initiator", "Reliable builder", "Organizer / systems person", "Caregiver / support role", "Explorer / still figuring it out"],
+      options: [
+        "Leader / initiator",
+        "Reliable builder",
+        "Organizer / systems person",
+        "Caregiver / support role",
+        "Explorer / still figuring it out",
+      ],
     },
     {
       id: "deal_breakers",
       category: "Commitment + Fit",
       type: "textarea",
       label: `What are your biggest deal-breakers for a ${projectType.toLowerCase()} project?`,
-      placeholder: "For example: too isolated, too crowded, not enough privacy, bad school fit, unclear ownership...",
+      placeholder:
+        "For example: too isolated, too crowded, not enough privacy, bad school fit, unclear ownership...",
     },
     {
       id: "relocation_readiness",
       category: "Location + Timing",
       type: "select",
       label: `Given your timeline of ${timeline.toLowerCase()}, how ready are you for real-world relocation steps?`,
-      options: ["Not ready yet", "Collecting information", "Can start planning soon", "Actively preparing", "Already taking action"],
+      options: [
+        "Not ready yet",
+        "Collecting information",
+        "Can start planning soon",
+        "Actively preparing",
+        "Already taking action",
+      ],
     },
     {
       id: "success_definition",
       category: "Commitment + Fit",
       type: "textarea",
       label: "What would success look like for you one year after joining the right project?",
-      placeholder: "Describe the life, rhythm, environment, and sense of belonging you want.",
+      placeholder:
+        "Describe the life, rhythm, environment, and sense of belonging you want.",
     },
   ];
 }
@@ -1072,6 +1205,7 @@ export default function Prototype4() {
 
   const groupedSummary = useMemo<Record<string, { id: string; label: string; value: string }[]>>(() => {
     const summary: Record<string, { id: string; label: string; value: string }[]> = {};
+
     adaptiveQuestions.forEach((question) => {
       if (!summary[question.category]) summary[question.category] = [];
       summary[question.category].push({
@@ -1080,6 +1214,18 @@ export default function Prototype4() {
         value: questionnaireAnswers[question.id] || "Not answered yet",
       });
     });
+
+    const hasHouseholdSize = (summary["Status"] || []).some((item) => item.id === "household_size");
+
+    if (questionnaireAnswers.household_size && !hasHouseholdSize) {
+      if (!summary["Status"]) summary["Status"] = [];
+      summary["Status"].splice(1, 0, {
+        id: "household_size",
+        label: "Household size",
+        value: questionnaireAnswers.household_size,
+      });
+    }
+
     return summary;
   }, [adaptiveQuestions, questionnaireAnswers]);
 
@@ -1159,7 +1305,21 @@ export default function Prototype4() {
   };
 
   const updateAnswer = (questionId: string, value: string) => {
-    setQuestionnaireAnswers((prev) => ({ ...prev, [questionId]: value }));
+    setQuestionnaireAnswers((prev) => {
+      const next = { ...prev, [questionId]: value };
+
+      if (questionId === "household_type") {
+        if (value === "Individual") {
+          next.household_size = "1";
+        } else if (value === "Couple") {
+          next.household_size = "2";
+        } else {
+          delete next.household_size;
+        }
+      }
+
+      return next;
+    });
   };
 
   const createProject = () => {
